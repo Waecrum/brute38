@@ -6,7 +6,7 @@ import (
 	"crypto/aes"
 	"crypto/sha256"
 	"encoding/hex"
-	"github.com/piotrnar/gocoin/btc"
+	"github.com/piotrnar/gocoin/lib/btc"
 	"log"
 	"math/big"
 )
@@ -54,9 +54,9 @@ func DecryptWithPassphrase(encryptedKey string, passphrase string) string {
 			passFactor = prefactorA
 		}
 
-		passpoint, err := btc.PublicFromPrivate(passFactor, true)
+		passpoint := btc.PublicFromPrivate(passFactor, true)
 		if passpoint == nil {
-			log.Fatal(err)
+			log.Fatal("erreur passpoint")
 		}
 
 		encryptedpart1 := dec[15:23]
@@ -101,9 +101,9 @@ func DecryptWithPassphrase(encryptedKey string, passphrase string) string {
 		privKey.Mul(passFactorBig, factorbBig)
 		privKey.Mod(privKey, bigN)
 
-		pubKey, err := btc.PublicFromPrivate(privKey.Bytes(), compress)
+		pubKey := btc.PublicFromPrivate(privKey.Bytes(), compress)
 		if pubKey == nil {
-			log.Fatal(err)
+			log.Fatal("erreur pubKey")
 		}
 
 		addr := btc.NewAddrFromPubkey(pubKey, 0).String()
