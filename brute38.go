@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/cculianu/brute38/bip38"
+	"github.com/Waecrum/brute38/bip38"
 	"github.com/docopt/docopt.go"
 	"log"
 	"runtime"
@@ -85,8 +85,10 @@ func main() {
 	}
 	fmt.Printf("Running brute force for BIP0038-encrypted string on %d CPUs\n", ncpu)
 	runtime.GOMAXPROCS(ncpu)
+	var mode int = 0
+	var kstr string = ""
 	if arguments["--mode"] != nil {
-		mode, err = strconv.Atoi(arguments["--mode"].(string))
+		mode, _ = strconv.Atoi(arguments["--mode"].(string))
 		if arguments["<knownstring>"] != nil {
 			kstr = arguments["<knownstring>"].(string)
 		} else {
