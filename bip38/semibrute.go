@@ -57,9 +57,9 @@ func searchRangeS(start uint64, finish uint64, encryptedKey string, charset stri
 	c <- ""
 }
 
-//func BruteS(routines int, encryptedKey string, charset string, pwlen int, resume uint64, mode int, knowString string) string {
-//	return BruteChunkS(routines, encryptedKey, charset, pwlen, 0, 1, resume, mode, knowString)
-//}
+Brutes := func(routines int, encryptedKey string, charset string, pwlen int, resume uint64, mode int, knowString string) string {
+	return BruteChunkS(routines, encryptedKey, charset, pwlen, 0, 1, resume, mode, knowString)
+}
 
 func BruteChunkS(routines int, encryptedKey string, charset string, pwlen int, chunk int, chunks int, resume uint64, mode int, knowString string) string {
 	if chunk < 0 || chunks <= 0 || chunk >= chunks {
