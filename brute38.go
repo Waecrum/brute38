@@ -17,6 +17,7 @@ Copyright (c) 2014, Calin Culianu <calin.culianu@gmail.com> 1Ca1inQuedcKdyELCTmN
 Usage:
   brute38 [--chunk=N/T] [--charset=S] [-t N] [--resume=NUM]
   brute38 [--chunk=N/T] [--charset=S] [-t N] [--resume=NUM] <pwlen> <privatekey>
+  brute38 [--chunk=N/T] [--charset=S] [-t N] [--resume=NUM] [--mode=NUM] <pwlen> <privatekey> <knownstring>
    
 Default key:
   If no privkey is specified, 6PfQoEzqbz3i2LpHibYnwAspwBwa3Nei1rU7UH9yzfutXT7tyUzV8aYAvG is used, with pwlen 4
@@ -30,6 +31,7 @@ Options:
   --charset=S    The set of characters to use. Defaults to !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_abcdefghijklmnopqrstuvwxyz{|}~. 
   -t N           Set maximum threads to N
   --resume=NUM   For continuing from a previously-aborted run. Specify the resume offset to continue from, as printed onscreen after a ^C
+  --mode=NUM	 If mode = 1 then type password = guess + knownPass + guess2
   -h             Usage Help
 `
 
@@ -83,13 +85,31 @@ func main() {
 	}
 	fmt.Printf("Running brute force for BIP0038-encrypted string on %d CPUs\n", ncpu)
 	runtime.GOMAXPROCS(ncpu)
-	result := bip38.BruteChunk(ncpu, priv, charset, pwlen, chunk, chunks, resume)
-	if result == "" {
-		fmt.Printf("\nNot found.\n")
-		return
-	} else if strings.HasPrefix(result, "to resume") {
-		fmt.Printf("Exiting... %s                                               \n", result)
-	} else {
-		fmt.Printf("\n!!! FOUND !!!!\n%s\n", result)
+	if arguments["--mode"] != nil {
+		mode, err = strconv.Atoi(arguments["--mode"].(string))
+		if arguments["<knownstring>"] != nil {
+			kstr = arguments["<knownstring>"].(string)
+		}
+		else {kstr = ""}
+		result := bip38.BruteChunkS(ncpu, priv, charset, pwlen, chunk, chunks, resume, mode, kstr)
+		if result == "" {
+			fmt.Printf("\nNot found.\n")
+			return
+		} else if strings.HasPrefix(result, "to resume") {
+			fmt.Printf("Exiting... %s                                               \n", result)
+		} else {
+			fmt.Printf("\n!!! FOUND !!!!\n%s\n", result)
+		}
+	}
+	else {
+		result := bip38.BruteChunk(ncpu, priv, charset, pwlen, chunk, chunks, resume)
+		if result == "" {
+			fmt.Printf("\nNot found.\n")
+			return
+		} else if strings.HasPrefix(result, "to resume") {
+			fmt.Printf("Exiting... %s                                               \n", result)
+		} else {
+			fmt.Printf("\n!!! FOUND !!!!\n%s\n", result)
+		}
 	}
 }
