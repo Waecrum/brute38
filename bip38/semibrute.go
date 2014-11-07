@@ -10,9 +10,6 @@ import (
 	"sync/atomic"
 )
 
-//var totalTried uint64 = 0
-//var stopSearch int32 = 0
-
 func searchRangeS(start uint64, finish uint64, encryptedKey string, charset string, pwlen int, modeSearch int,  knowString string, c chan string) {
 	cset := []rune(charset)
 	var i uint64
