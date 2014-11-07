@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 )
 
-var totalTried uint64 = 0
-var stopSearch int32 = 0
+//var totalTried uint64 = 0
+//var stopSearch int32 = 0
 
 func searchRangeS(start uint64, finish uint64, encryptedKey string, charset string, pwlen int, modeSearch int,  knowString string, c chan string) {
 	cset := []rune(charset)
@@ -61,7 +61,7 @@ func searchRangeS(start uint64, finish uint64, encryptedKey string, charset stri
 }
 
 func BruteS(routines int, encryptedKey string, charset string, pwlen int, resume uint64, mode int, knowString string) string {
-	return BruteChunkS(routines, encryptedKey, charset, pwlen, 0, 1, resume, mode int, knowString string)
+	return BruteChunkS(routines, encryptedKey, charset, pwlen, 0, 1, resume, mode, knowString)
 }
 
 func BruteChunkS(routines int, encryptedKey string, charset string, pwlen int, chunk int, chunks int, resume uint64, mode int, knowString string) string {
@@ -125,8 +125,7 @@ func BruteChunkS(routines int, encryptedKey string, charset string, pwlen int, c
 			start := uint64(i)*blockSize + startFrom + resume
 			go searchRangeS(start, finish, encryptedKey, charset, pwlen, mode, knowString, c)
 		}
-	}
-	else {
+	} else {
 		for i := 0; i < routines; i++ {
 			var finish uint64
 			if i == routines-1 {
