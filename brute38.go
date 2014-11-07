@@ -89,8 +89,9 @@ func main() {
 		mode, err = strconv.Atoi(arguments["--mode"].(string))
 		if arguments["<knownstring>"] != nil {
 			kstr = arguments["<knownstring>"].(string)
+		} else {
+			kstr = ""
 		}
-		else {kstr = ""}
 		result := bip38.BruteChunkS(ncpu, priv, charset, pwlen, chunk, chunks, resume, mode, kstr)
 		if result == "" {
 			fmt.Printf("\nNot found.\n")
@@ -100,8 +101,7 @@ func main() {
 		} else {
 			fmt.Printf("\n!!! FOUND !!!!\n%s\n", result)
 		}
-	}
-	else {
+	} else {
 		result := bip38.BruteChunk(ncpu, priv, charset, pwlen, chunk, chunks, resume)
 		if result == "" {
 			fmt.Printf("\nNot found.\n")
